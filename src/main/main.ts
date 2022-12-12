@@ -135,15 +135,3 @@ app
     });
   })
   .catch(console.log);
-
-autoUpdater.on('update-available', (info) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Ok'],
-    title: 'Update Available',
-    message: process.platform === 'win32' ? '123' : '321',
-    detail:
-      'A new version download started. The app will be restarted to install the update.',
-  };
-  dialog.showMessageBox(dialogOpts);
-});
