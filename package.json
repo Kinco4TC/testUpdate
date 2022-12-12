@@ -185,8 +185,8 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "testUpdate",
+    "appId": "org.erb.testUpdate",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
