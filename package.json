@@ -245,7 +245,7 @@
     "publish": {
       "provider": "github",
       "owner": "Kinco4TC",
-      "repo": "https://github.com/Kinco4TC/testUpdate.git"
+      "repo": "testUpdate"
     }
   },
   "collective": {
