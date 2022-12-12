@@ -19,7 +19,7 @@ const Hello = () => {
             <span role="img" aria-label="books">
               📚
             </span>
-            Read our docs FuckV10
+            Read our docs FuckV11
           </button>
         </a>
         <a
