@@ -1,3 +1,4 @@
+/* eslint-disable promise/no-nesting */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
 /**
@@ -15,25 +16,30 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+let mainWindow: BrowserWindow | null = null;
 class AppUpdater {
   constructor() {
-    log.default.transports.console.level = false;
-    log.default.transports.file.level = 'error';
-    log.default.error('In production mode');
-    // log.transports.file.level = 'error';
-    log.transports.file.resolvePath = () => path.join(__dirname, '/log.log');
     autoUpdater.logger = log;
+    log.transports.file.level = 'debug';
     autoUpdater.checkForUpdates();
     autoUpdater.on('update-available', (info) => {
       const dialogOpts = {
         type: 'info',
         buttons: ['Ok'],
         title: 'Update Available',
-        message: '312',
-        detail:
-          'A new version download started. The app will be restarted to install the update.',
+        message: info.releaseName ?? '',
+        detail: JSON.stringify(info),
       };
-      dialog.showMessageBox(dialogOpts);
+      const a = dialog
+        .showMessageBox(dialogOpts)
+        .then(() => {
+          autoUpdater.downloadUpdate().catch((e) => {
+            if (mainWindow) {
+              mainWindow.webContents.send('fuck', `cnm, ${JSON.stringify(e)},`);
+            }
+          });
+        })
+        .catch((e) => console.error(e));
     });
     autoUpdater.on('update-downloaded', (info) => {
       const dialogOpts = {
@@ -53,8 +59,6 @@ class AppUpdater {
     });
   }
 }
-
-let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
