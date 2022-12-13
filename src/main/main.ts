@@ -17,9 +17,40 @@ import { resolveHtmlPath } from './util';
 
 class AppUpdater {
   constructor() {
-    log.transports.file.level = 'error';
+    log.default.transports.console.level = false;
+    log.default.transports.file.level = 'error';
+    log.default.error('In production mode');
+    // log.transports.file.level = 'error';
+    log.transports.file.resolvePath = () => path.join(__dirname, '/log.log');
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
+    autoUpdater.on('update-available', (info) => {
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['Ok'],
+        title: 'Update Available',
+        message: '312',
+        detail:
+          'A new version download started. The app will be restarted to install the update.',
+      };
+      dialog.showMessageBox(dialogOpts);
+    });
+    autoUpdater.on('update-downloaded', (info) => {
+      const dialogOpts = {
+        type: 'info',
+        buttons: ['Restart', 'Later'],
+        title: 'Application Update',
+        message: '123',
+        detail:
+          'A new version has been downloaded. Restart the application to apply the updates.',
+      };
+      dialog
+        .showMessageBox(dialogOpts)
+        .then((returnValue) => {
+          if (returnValue.response === 0) autoUpdater.quitAndInstall();
+        })
+        .catch((e) => console.error(e));
+    });
   }
 }
 

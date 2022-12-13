@@ -20,6 +20,8 @@ node_modules
 
 release/app/dist
 release/build
+
+release/v14
 .erb/dll
 
 .idea
